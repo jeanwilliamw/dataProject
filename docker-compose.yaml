@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: dataProjectDB
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=dataProject
+      - POSTGRES_USER=Anchor6376
+      - POSTGRES_PASSWORD=RaQVieFyDTZjAG5vXEiZ
+    volumes:
+      - ./data:/var/lib/postgresql/data

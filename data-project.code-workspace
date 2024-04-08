@@ -1,0 +1,16 @@
+{
+  "folders": [
+    {
+      "name": "FRONT",
+      "path": "data-project-front"
+    },
+    {
+      "name": "API",
+      "path": "data-project-api"
+    },
+    {
+      "name": "ROOT",
+      "path": "."
+    }
+  ],
+}

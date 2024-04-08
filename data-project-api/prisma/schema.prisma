@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map(name: "user") // Maps the model to "user" table in the database
+}
+
+model Client {
+  id               String    @id @default(uuid()) @map(name: "id")
+  buyDate          DateTime  @map(name: "buy_date")
+  pricePaid        Float     @map(name: "price_paid")
+  numberOfChildren Int       @map(name: "number_of_children")
+  city             String    @map(name: "city")
+  workCategory     String    @map(name: "work_category")
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
+  collects         Collect[] @relation("client_collects")
+
+  @@map(name: "client") // Maps the model to "client" table in the database
+}
+
+model Collect {
+  id           Int      @id @default(autoincrement()) @map(name: "id")
+  clientId     String   @map(name: "client_id")
+  articlePrice Float    @map(name: "article_price")
+  categoryId   Int      @map(name: "category_id")
+  createdAt    DateTime @default(now()) @map(name: "created_at")
+  updatedAt    DateTime @updatedAt @map(name: "updated_at")
+
+  client   Client   @relation("client_collects", fields: [clientId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map(name: "collect") // Maps the model to "collect" table in the database
+}
+
+model Category {
+  id        Int      @id @default(autoincrement()) @map(name: "id")
+  name      String   @map(name: "name")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  collects Collect[]
+
+  @@map(name: "category") // Maps the model to "category" table in the database
+}
+
+enum Role {
+  ADMIN
+  USER
+}

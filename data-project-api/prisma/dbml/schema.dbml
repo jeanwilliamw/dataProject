@@ -1,0 +1,53 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table user {
+  id Int [pk, increment]
+  username String [not null]
+  email String [unique, not null]
+  password String [not null]
+  role Role [not null, default: 'USER']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table client {
+  id String [pk]
+  buyDate DateTime [not null]
+  pricePaid Float [not null]
+  numberOfChildren Int [not null]
+  city String [not null]
+  workCategory String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  collects collect [not null]
+}
+
+Table collect {
+  id Int [pk, increment]
+  clientId String [not null]
+  articlePrice Float [not null]
+  categoryId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  client client [not null]
+  category category [not null]
+}
+
+Table category {
+  id Int [pk, increment]
+  name String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  collects collect [not null]
+}
+
+Enum Role {
+  ADMIN
+  USER
+}
+
+Ref: collect.clientId > client.id [delete: Cascade]
+
+Ref: collect.categoryId > category.id
